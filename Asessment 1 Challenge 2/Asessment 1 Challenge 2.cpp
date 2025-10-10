@@ -4,36 +4,42 @@
 #include <iostream>
 #include <string>
 
+
 int main() 
 { 
     std::string name;
     std::string username;
     std::string clantag;
-    int Exp;
+    unsigned int Exp = 200;
+    
     std::cout << "What is your name?\n";
     std::cin >> name;
     std::cout << "What is your username?\n";
     std::cin >> username;
     std::cout << "What is your clantag?\n";
     std::cin >> clantag;
-    std::cout << "How many experience points do you have?\n";
-    std::cin >> Exp;
+    do
+    {
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
+        std::cout << "How many experience points do you have?\n";
+        std::cin >> Exp;
+    } while (std::cin.fail() == true);
+        
+    
+    int Level = Exp / 100;
+    int ExpNeededToNextLevel = 100 * (Level + 1) - Exp;
     std::cout << "Your name is " << name << " and your in-game name is [ " << clantag << " ]" << username;
     std::cout << "\nYou have " << Exp << " experience points\n\n";
-    std::cout << "You are currently level " << WhatLevelAndHowClosetoNextLevel(Exp);
+    std::cout << "You are currently level " << Level << '\n';
+    std::cout << "You need " << ExpNeededToNextLevel << " points to reach the next level, which is " << (Level + 1);
+
 
         
 
 }
 
-int WhatLevelAndHowClosetoNextLevel (int Exp) {
 
-    int Level = Exp / 100;
-
-
-    return Level;
-
-}
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
 
