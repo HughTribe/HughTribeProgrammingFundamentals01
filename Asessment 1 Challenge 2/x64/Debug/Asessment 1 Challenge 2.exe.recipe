@@ -2,7 +2,11 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
+<<<<<<< HEAD
       <FullPath>C:\Users\HughT\source\github\HughTribeProgrammingFundamentals01\x64\Debug\Asessment 1 Challenge 2.exe</FullPath>
+=======
+      <FullPath>C:\Users\t012314p\Documents\GitHub\HughTribeProgrammingFundamentals01\x64\Debug\Asessment 1 Challenge 2.exe</FullPath>
+>>>>>>> 193c5fdd61abe29150c5a3e10c97fa579cf5a9a2
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
