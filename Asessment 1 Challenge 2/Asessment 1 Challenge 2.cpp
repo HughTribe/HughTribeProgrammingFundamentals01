@@ -3,7 +3,14 @@
 
 #include <iostream>
 #include <string>
+int WhatLevelAndHowClosetoNextLevel(int Exp) {
 
+    int Level = Exp / 100;
+
+
+    return Level;
+
+}
 int main() 
 { 
     std::string name;
