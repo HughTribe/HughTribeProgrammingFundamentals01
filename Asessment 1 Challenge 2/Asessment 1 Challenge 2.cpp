@@ -5,16 +5,16 @@
 #include <string>
 int WhatLevelAndHowClosetoNextLevel(int Exp) {
 
-<<<<<<< HEAD
+
     int Level = Exp / 100;
 
 
     return Level;
 
 }
-=======
 
->>>>>>> 193c5fdd61abe29150c5a3e10c97fa579cf5a9a2
+
+
 int main() 
 { 
     std::string name;
