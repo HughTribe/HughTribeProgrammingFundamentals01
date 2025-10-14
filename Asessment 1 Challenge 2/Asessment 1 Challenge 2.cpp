@@ -13,8 +13,6 @@ int WhatLevelAndHowClosetoNextLevel(int Exp) {
 
 }
 
-
-
 int main() 
 { 
     std::string name;
