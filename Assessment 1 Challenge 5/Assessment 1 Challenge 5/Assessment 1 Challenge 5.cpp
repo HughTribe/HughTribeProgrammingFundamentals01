@@ -74,6 +74,30 @@ std::string SentenceCase(const std::string& text)
     }
     return result;
 }
+// Returns a new string with alternating casing starting with uppercase
+std::string AlternateCasing(const std::string& text) 
+{
+	std::string result = text;
+    int c = 0;
+    for (int i = 0; i < result.length(); i++)
+    {
+        if (std::isalpha(static_cast<unsigned char>(result[i])) && (c % 2 == 0))
+		{
+			c++;    
+            result[i] = std::toupper(static_cast<unsigned char>(result[i]));
+             continue;
+        }
+       
+        else if (std::isalpha(static_cast<unsigned char>(result[i])) && (c % 2 != 0))
+        {
+            c++;
+            result[i] = std::tolower(static_cast<unsigned char>(result[i]));
+            continue;
+        }
+        continue;
+    }
+	return result;
+}
 int main()
 {
     std::string input;
@@ -97,6 +121,8 @@ int main()
     std::cout << "Uppercase        => " << CapitaliseAll(input) << std::endl;
     std::cout << "Lowercase        => " << UncapitaliseAll(input) << std::endl;
 	std::cout << "Sentence case    => " << SentenceCase(input) << std::endl;
+    std::cout << "Alternate casing => " << AlternateCasing(input) << std::endl;
+	return 0;
 
 }
 
