@@ -4,31 +4,42 @@
 #include <iostream>
 #include <string>
 #include <cctype>
-std::string Text;
-bool ValidInputCalculator(std::string Text) 
-{
-	for (char x : Text)
-	{
-		if (isalpha(x) == true)
-		{
-			return true;
-		}
-		
-	}
-	return false;
-}
-int main()
-{ 
-	do
-	{
-	std::cin.clear();
-	std::cin.ignore(1000,  '\n');
-	std::cout << "Enter some text\n";
-	std::getline(std::cin, Text);
 
-	} while ((Text.length() == 0) && (ValidInputCalculator(Text) == 0));
-	std::cout << "ValidinputCalculator = " << ValidInputCalculator(Text);
-	
+// Checks if the input contains at least one alphabetic character
+bool ContainsAlpha(const std::string& text) 
+{
+    for (char x : text)
+    {
+        if (std::isalpha(static_cast<unsigned char>(x)))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Returns a new string with all characters capitalized
+std::string CapitalizeAll(const std::string& text)
+{
+    std::string result = text;
+    for (char& c : result)
+    {
+        c = std::toupper(static_cast<unsigned char>(c));
+    }
+    return result;
+}
+
+int main()
+{
+    std::string input;
+    do
+    {
+        std::cout << "Enter some text: ";
+        std::getline(std::cin, input);
+        std::cout << "ContainsAlpha = " << ContainsAlpha(input) << '\n'; // debug
+    } while (input.empty() || ContainsAlpha(input) == false);
+
+    std::cout << "Uppercase        => " << CapitalizeAll(input) << std::endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
