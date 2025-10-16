@@ -18,8 +18,8 @@ bool ContainsAlpha(const std::string& text)
     return false;
 }
 
-// Returns a new string with all characters capitalized
-std::string CapitalizeAll(const std::string& text)
+// Returns a new string with all characters capitalised
+std::string CapitaliseAll(const std::string& text)
 {
     std::string result = text;
     for (char& c : result)
@@ -28,7 +28,52 @@ std::string CapitalizeAll(const std::string& text)
     }
     return result;
 }
+// Returns a new string with all characters in lowercase
+std::string UncapitaliseAll(const std::string& text)
+{
+    std::string result = text;
+    for (char& c : result)
+    {
+        c = std::tolower(static_cast<unsigned char>(c));
+    }
+    return result;
+}
 
+// Returns a new string with the first character of each sentence capitalised
+std::string SentenceCase(const std::string& text)
+{
+    std::string result = text;
+    for (int i = 0; i < result.length(); i++)
+    {
+        if (std::isalpha(static_cast<unsigned char>(result[i])))
+        {
+            result[i] = std::toupper(static_cast<unsigned char>(result[i]));
+            break;
+        }
+    }
+    for (int i = 1; i < result.length(); i++)
+    {
+        if (result[i - 1] == '.' || result[i - 1] == '!' || result[i - 1] == '?')
+        {
+            // Skip any spaces after the punctuation
+            while (i < result.length() && std::isspace(static_cast<unsigned char>(result[i])))
+            {
+                i++;
+            }
+            // Capitalise the next alphabetic character
+            if (i < result.length() && std::isalpha(static_cast<unsigned char>(result[i])))
+            {
+                result[i] = std::toupper(static_cast<unsigned char>(result[i]));
+            }
+        }
+        else
+        {
+            // Ensure all other characters are lowercase
+            result[i] = std::tolower(static_cast<unsigned char>(result[i]));
+        }
+    }
+    return result;
+}
 int main()
 {
     std::string input;
@@ -36,10 +81,23 @@ int main()
     {
         std::cout << "Enter some text: ";
         std::getline(std::cin, input);
-        std::cout << "ContainsAlpha = " << ContainsAlpha(input) << '\n'; // debug
-    } while (input.empty() || ContainsAlpha(input) == false);
+		//might use a switch statement but seems a bit overkill for this
+        if (input.empty())
+        {
+			std::cerr << "Error: Input cannot be empty. Please try again.\n";
+            continue;
+        }
+        if (!ContainsAlpha(input))
+        {
+			std::cerr << "Error: Input must contain at least one alphabetic character. Please try again.\n";
+            continue;
+        }
+    } while (input.empty() || !ContainsAlpha(input));
 
-    std::cout << "Uppercase        => " << CapitalizeAll(input) << std::endl;
+    std::cout << "Uppercase        => " << CapitaliseAll(input) << std::endl;
+    std::cout << "Lowercase        => " << UncapitaliseAll(input) << std::endl;
+	std::cout << "Sentence case    => " << SentenceCase(input) << std::endl;
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
