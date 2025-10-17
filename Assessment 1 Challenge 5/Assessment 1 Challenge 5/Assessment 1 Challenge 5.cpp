@@ -6,8 +6,8 @@
 #include <cctype>
 
 // Checks if the input contains at least one alphabetic character
-bool ContainsAlpha(const std::string& text) 
-{
+bool ContainsAlpha(const std::string& text) {
+    
     for (char x : text)
     {
         if (std::isalpha(static_cast<unsigned char>(x)))
@@ -19,8 +19,8 @@ bool ContainsAlpha(const std::string& text)
 }
 
 // Returns a new string with all characters capitalised
-std::string CapitaliseAll(const std::string& text)
-{
+std::string CapitaliseAll(const std::string& text) {
+    
     std::string result = text;
     for (char& c : result)
     {
@@ -28,9 +28,10 @@ std::string CapitaliseAll(const std::string& text)
     }
     return result;
 }
+
 // Returns a new string with all characters in lowercase
-std::string UncapitaliseAll(const std::string& text)
-{
+std::string UncapitaliseAll(const std::string& text) {
+
     std::string result = text;
     for (char& c : result)
     {
@@ -40,8 +41,8 @@ std::string UncapitaliseAll(const std::string& text)
 }
 
 // Returns a new string with the first character of each sentence capitalised
-std::string SentenceCase(const std::string& text)
-{
+std::string SentenceCase(const std::string& text) {
+
     std::string result = text;
     for (int i = 0; i < result.length(); i++)
     {
@@ -74,20 +75,21 @@ std::string SentenceCase(const std::string& text)
     }
     return result;
 }
+
 // Returns a new string with alternating casing starting with uppercase
-std::string AlternateCasing(const std::string& text) 
-{
-	std::string result = text;
+std::string AlternateCasing(const std::string& text) {
+
+    std::string result = text;
     int c = 0;
     for (int i = 0; i < result.length(); i++)
     {
         if (std::isalpha(static_cast<unsigned char>(result[i])) && (c % 2 == 0))
-		{
-			c++;    
+        {
+            c++;
             result[i] = std::toupper(static_cast<unsigned char>(result[i]));
-             continue;
+            continue;
         }
-       
+
         else if (std::isalpha(static_cast<unsigned char>(result[i])) && (c % 2 != 0))
         {
             c++;
@@ -96,8 +98,9 @@ std::string AlternateCasing(const std::string& text)
         }
         continue;
     }
-	return result;
+    return result;
 }
+
 int main()
 {
     std::string input;
@@ -125,6 +128,7 @@ int main()
 	return 0;
 
 }
+
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
