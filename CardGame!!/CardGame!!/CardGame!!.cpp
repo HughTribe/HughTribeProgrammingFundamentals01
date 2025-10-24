@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <string>
 
 struct player {
     int health;
@@ -10,15 +11,26 @@ struct player {
 	int agility;
     int armour;
 };
+player enemy{ 100, 5, 0, 10, 0};
 
-
-
+bool IsDead(player p)
+{
+    if (p.health <= 0)
+    {
+        return true;
+    }
+    else
+    {
+		return false;
+    }
+}
 
 
 
 
 int main()
 {
+	std::string input;
     std::cout <<  R"( 
  _    _      _                            _         ______          _           
 | |  | |    | |                          | |        | ___ \        | |          
@@ -27,14 +39,30 @@ int main()
 \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |\ \ (_| | (_| |  __/\__ \
  \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  \_| \_\__,_|\__,_|\___||___/
                                                                                 
-                                                                                
-
-              
-
-
-
         )" << '\n';
+    do
+    {
+        std::cout << "Your turn :) what will you do?\n";
+		std::getline(std::cin,input);
+        if (input == "attack")
+        {
+            std::cout << "which attack? :)\n";
+            std::getline(std::cin, input);
+            if (input == "headbutt")
+            {
+                enemy.health -= 10;
+                std::cout << "You headbutted the enemy for 10 damage! Enemy health is now " << enemy.health << "\n";
+            }    
+
+        }
+
+    } while (true);
+
+
 }
+
+
+
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
