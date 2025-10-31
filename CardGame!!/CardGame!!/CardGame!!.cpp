@@ -91,6 +91,15 @@ using namespace std;
 
 void displayMenu(const string options[], int size, int selected) {
     system("cls"); // Clear the console screen
+    std::cout << R"( 
+ _    _      _                            _         ______          _           
+| |  | |    | |                          | |        | ___ \        | |          
+| |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___   | |_/ /__ _  __| | ___  ___ 
+| |/\| |/ _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |    // _` |/ _` |/ _ \/ __|
+\  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |\ \ (_| | (_| |  __/\__ \
+ \/  \/ \___|_|\___ \___/|_| |_| |_|\___|  \__\___/  \_| \_\__,_|\__,_|\___||___/
+                                                                                
+       )" << '\n';
     for (int i = 0; i < size; i++) {
         if (i == selected) {
             cout << " > " << options[i] << " < " << endl; // Highlight selected option
@@ -101,7 +110,9 @@ void displayMenu(const string options[], int size, int selected) {
     }
 }
 
-int main() {
+int main() 
+{
+
     const int optionCount = 4;
     string options[optionCount] = { "Option 1", "Option 2", "Option 3", "Exit" };
     int selected = 0;
