@@ -84,22 +84,15 @@
 //
 //}
 
+
 #include <iostream>
 #include <conio.h> // For _getch()
 
 using namespace std;
 
-void displayMenu(const string options[], int size, int selected) {
+void displayMenu(const string options[], int size, int selected, string extra) {
     system("cls"); // Clear the console screen
-    std::cout << R"( 
- _    _      _                            _         ______          _           
-| |  | |    | |                          | |        | ___ \        | |          
-| |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___   | |_/ /__ _  __| | ___  ___ 
-| |/\| |/ _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |    // _` |/ _` |/ _ \/ __|
-\  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |\ \ (_| | (_| |  __/\__ \
- \/  \/ \___|_|\___ \___/|_| |_| |_|\___|  \__\___/  \_| \_\__,_|\__,_|\___||___/
-                                                                                
-       )" << '\n';
+    std::cout << extra << '\n';
     for (int i = 0; i < size; i++) {
         if (i == selected) {
             cout << " > " << options[i] << " < " << endl; // Highlight selected option
@@ -110,15 +103,14 @@ void displayMenu(const string options[], int size, int selected) {
     }
 }
 
-int main() 
+void characterSelection()
 {
-
-    const int optionCount = 4;
-    string options[optionCount] = { "Option 1", "Option 2", "Option 3", "Exit" };
+    const int optionCount = 3;
+    string options[optionCount] = {"Rogue", "Wizard", "Jack LLoyd"};
     int selected = 0;
-
-    while (true) {
-        displayMenu(options, optionCount, selected);
+    bool ChosenClass = true;
+    while (ChosenClass) {
+        displayMenu(options, optionCount, selected, "");
 
         char key = _getch(); // Get user input without pressing Enter
         if (key == 72) { // Up arrow key
@@ -129,9 +121,60 @@ int main()
         }
         else if (key == '\r') { // Enter key
             system("cls");
-            cout << "You selected: " << options[selected] << endl;
-            if (options[selected] == "Exit") break;
-            system("pause");
+			ChosenClass = false;
+			cout << "You selected: " << options[selected] << endl;
+            /*cout << "You selected: " << options[selected] << endl;*/
+            /*if (options[selected] == "Exit") break;
+            system("pause");*/
+        }
+    }
+
+
+
+    
+}
+
+
+int main() 
+{
+
+    const int optionCount = 4;
+    string options[optionCount] = { "Start Game", "Option 2", "Option 3", "Exit" };
+    int selected = 0;
+
+    string extra = R"( 
+ _    _      _                            _         ______          _           
+| |  | |    | |                          | |        | ___ \        | |          
+| |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___   | |_/ /__ _  __| | ___  ___ 
+| |/\| |/ _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |    // _` |/ _` |/ _ \/ __|
+\  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |\ \ (_| | (_| |  __/\__ \
+ \/  \/ \___|_|\___ \___/|_| |_| |_|\___|  \__\___/  \_| \_\__,_|\__,_|\___||___/
+                                                                                
+       )";
+
+    while (true) {
+        displayMenu(options, optionCount, selected, extra);
+
+        char key = _getch(); // Get user input without pressing Enter
+        if (key == 72) { // Up arrow key
+            selected = (selected - 1 + optionCount) % optionCount;
+        }
+        else if (key == 80) { // Down arrow key
+            selected = (selected + 1) % optionCount;
+        }
+        else if (key == '\r') { // Enter key
+            system("cls");
+            if (options[selected] == "Start Game") {
+                characterSelection();
+                break;
+            }
+            else if (options[selected] == "Exit") {
+                break;
+			}
+
+            /*cout << "You selected: " << options[selected] << endl;*/
+            /*if (options[selected] == "Exit") break;
+            system("pause");*/
         }
     }
 
