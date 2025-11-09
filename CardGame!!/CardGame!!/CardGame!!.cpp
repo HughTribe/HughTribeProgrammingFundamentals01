@@ -87,12 +87,54 @@
 
 #include <iostream>
 #include <conio.h> // For _getch()
+#include <vector>
 
 using namespace std;
 
+
+
+
+class Card {
+public:
+    Card(string n, int m, int d) {
+
+        Name = n;
+        ManaCost = m;
+        Damage = d;
+    }
+    string Name;
+    int ManaCost;
+    int Damage;
+    void PrintCard() {
+
+        cout << "Name is " << Name << endl;
+        cout << "Mana cost is " << ManaCost << endl;
+        cout << "Damage is " << Damage << endl;
+    }
+
+
+};
+
+class Hand {
+public:
+    Hand(string Character) {
+        if (Character == "Wizard")
+        {
+            mHand.push_back(Card("Blaze", 2, 5));
+
+            mHand.at(0).PrintCard();
+
+        }
+
+    }
+    vector<Card> mHand;
+
+
+};
+
 void displayMenu(const string options[], int size, int selected, string extra) {
     system("cls"); // Clear the console screen
-    std::cout << extra << '\n';
+    cout << extra << '\n';
     for (int i = 0; i < size; i++) {
         if (i == selected) {
             cout << " > " << options[i] << " < " << endl; // Highlight selected option
@@ -108,8 +150,8 @@ void characterSelection()
     const int optionCount = 3;
     string options[optionCount] = {"Rogue", "Wizard", "Jack LLoyd"};
     int selected = 0;
-    bool ChosenClass = true;
-    while (ChosenClass) {
+   /* bool ChosenClass = true;*/
+    while (true) {
         displayMenu(options, optionCount, selected, "");
 
         char key = _getch(); // Get user input without pressing Enter
@@ -121,9 +163,15 @@ void characterSelection()
         }
         else if (key == '\r') { // Enter key
             system("cls");
-			ChosenClass = false;
-			cout << "You selected: " << options[selected] << endl;
-            /*cout << "You selected: " << options[selected] << endl;*/
+            Hand H (options[selected]);
+
+            //game loop - move?
+            while (true)
+            {
+
+            }
+
+
             /*if (options[selected] == "Exit") break;
             system("pause");*/
         }
@@ -148,7 +196,7 @@ int main()
 | |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___   | |_/ /__ _  __| | ___  ___ 
 | |/\| |/ _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |    // _` |/ _` |/ _ \/ __|
 \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |\ \ (_| | (_| |  __/\__ \
- \/  \/ \___|_|\___ \___/|_| |_| |_|\___|  \__\___/  \_| \_\__,_|\__,_|\___||___/
+ \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  \_| \_\__,_|\__,_|\___||___/
                                                                                 
        )";
 
@@ -165,8 +213,8 @@ int main()
         else if (key == '\r') { // Enter key
             system("cls");
             if (options[selected] == "Start Game") {
+                //sselect character
                 characterSelection();
-                break;
             }
             else if (options[selected] == "Exit") {
                 break;
