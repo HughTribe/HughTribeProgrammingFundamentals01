@@ -120,17 +120,27 @@ public:
     Hand(string Character) {
         if (Character == "Wizard")
         {
-            mHand.push_back(Card("Blaze", 2, 5));
+            vHand.push_back(Card("Blaze", 2, 5));
 
-            mHand.at(0).PrintCard();
+            vHand.at(0).PrintCard();
 
         }
 
     }
-    vector<Card> mHand;
+    vector<Card> vHand;
 
 
 };
+
+void PrintCard(Card c)
+{
+    cout << "";
+
+
+
+
+
+}
 
 void displayMenu(const string options[], int size, int selected, string extra) {
     system("cls"); // Clear the console screen
