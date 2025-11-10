@@ -105,11 +105,21 @@ public:
     string Name;
     int ManaCost;
     int Damage;
-    void PrintCard() {
+    void PrintCard() 
+    {
 
-        cout << "Name is " << Name << endl;
+		cout << R"(
+            ______________
+            |            |  
+            |   Blaze    |   
+            |____________|"
+            )" << endl;
+              
+
+
+        /*cout << "Name is " << Name << endl;
         cout << "Mana cost is " << ManaCost << endl;
-        cout << "Damage is " << Damage << endl;
+        cout << "Damage is " << Damage << endl;*/
     }
 
 
@@ -120,27 +130,36 @@ public:
     Hand(string Character) {
         if (Character == "Wizard")
         {
+            vHand.push_back(Card("Icicle", 3, 9));
             vHand.push_back(Card("Blaze", 2, 5));
+            vHand.push_back(Card("Blaze", 2, 5));
+            vHand.push_back(Card("Shock", 4, 11));
+            vHand.push_back(Card("Fart", 1, 1));
 
             vHand.at(0).PrintCard();
-
+            
         }
 
     }
     vector<Card> vHand;
+    void PrintCard(Card a, Card b, Card c, Card d, Card e)
+    {
+
+		cout << '\t' << "___________   ____________   ____________   ___________   ___________" << endl;
+		cout << '\t' << "|         |   |          |   |          |   |         |   |         |" << endl;
+        cout << '\t' << "|         |   |          |   |          |   |         |   |         |" << endl;
+
+
+
+        /*cout << "Name is " << Name << endl;
+        cout << "Mana cost is " << ManaCost << endl;
+        cout << "Damage is " << Damage << endl;*/
+    }
+
 
 
 };
-
-void PrintCard(Card c)
-{
-    cout << "";
-
-
-
-
-
-}
+ 
 
 void displayMenu(const string options[], int size, int selected, string extra) {
     system("cls"); // Clear the console screen
