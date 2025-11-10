@@ -130,25 +130,47 @@ public:
     Hand(string Character) {
         if (Character == "Wizard")
         {
-            vHand.push_back(Card("Icicle", 3, 9));
+            vHand.push_back(Card("Curse", 3, 9));
             vHand.push_back(Card("Blaze", 2, 5));
             vHand.push_back(Card("Blaze", 2, 5));
             vHand.push_back(Card("Shock", 4, 11));
-            vHand.push_back(Card("Fart", 1, 1));
+            vHand.push_back(Card("Cough", 1, 1));
 
-            vHand.at(0).PrintCard();
+            
             
         }
 
     }
     vector<Card> vHand;
-    void PrintCard(Card a, Card b, Card c, Card d, Card e)
+    void PrintCard(vector<Card> vHand)
     {
 
-		cout << '\t' << "___________   ____________   ____________   ___________   ___________" << endl;
-		cout << '\t' << "|         |   |          |   |          |   |         |   |         |" << endl;
-        cout << '\t' << "|         |   |          |   |          |   |         |   |         |" << endl;
+		cout << '\t' << "___________   ___________   ___________   ___________   ___________" << endl;
+		cout << '\t' << "|         |   |         |   |         |   |         |   |         |" << endl << '\t';
+        
+        for(int i = 0; i < vHand.size(); i++)
+        {   
+			cout << '|';
+            /*float spaces = (9 - vHand.at(i).Name.length()) / 2;*/
+            int spaces = (9 - vHand.at(i).Name.length()) / 2;
+            /*if(spaces % 2 != 0)
+            {
+				cout << " ";
+			}*/
+            for (int j = 0; j < spaces; j++)
+            {
+                cout << " ";
 
+            }
+            cout << vHand.at(i).Name;
+            for (int j = 0; j < spaces; j++)
+            {
+                cout << " ";
+			}
+			cout << "|   ";
+		}
+        cout << "\n\t" << "|_________|   |_________|   |_________|   |_________|   |_________|" << endl;
+       
 
 
         /*cout << "Name is " << Name << endl;
@@ -193,6 +215,7 @@ void characterSelection()
         else if (key == '\r') { // Enter key
             system("cls");
             Hand H (options[selected]);
+			H.PrintCard(H.vHand);
 
             //game loop - move?
             while (true)
