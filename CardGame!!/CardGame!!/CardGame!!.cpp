@@ -142,9 +142,9 @@ public:
 
     }
     vector<Card> vHand;
-    void PrintCard(vector<Card> vHand)
+    void PrintHand(vector<Card> vHand, int selected)
     {
-
+        
 		cout << '\t' << "___________   ___________   ___________   ___________   ___________" << endl;
 		cout << '\t' << "|         |   |         |   |         |   |         |   |         |" << endl << '\t';
         
@@ -215,7 +215,7 @@ void characterSelection()
         else if (key == '\r') { // Enter key
             system("cls");
             Hand H (options[selected]);
-			H.PrintCard(H.vHand);
+			H.PrintHand(H.vHand, 0);
 
             //game loop - move?
             while (true)
