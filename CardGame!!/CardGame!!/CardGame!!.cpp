@@ -104,50 +104,44 @@ public:
     }
     string Name;
     int ManaCost;
-    int Damage;
-    void PrintCard() 
-    {
-
-		cout << R"(
-            ______________
-            |            |  
-            |   Blaze    |   
-            |____________|"
-            )" << endl;
-              
-
-
-        /*cout << "Name is " << Name << endl;
-        cout << "Mana cost is " << ManaCost << endl;
-        cout << "Damage is " << Damage << endl;*/
-    }
-
-
+    int Damage;  
 };
 
 class Hand {
 public:
-    Hand(string Character) {
+    Hand(string Character) 
+    {
         if (Character == "Wizard")
         {
             vHand.push_back(Card("Curse", 3, 9));
             vHand.push_back(Card("Blaze", 2, 5));
             vHand.push_back(Card("Blaze", 2, 5));
             vHand.push_back(Card("Shock", 4, 11));
-            vHand.push_back(Card("Cough", 1, 1));
-
-            
-            
+            vHand.push_back(Card("Cough", 1, 1));                     
         }
-
+        if (Character == "Rogue")
+        {
+            vHand.push_back(Card("Slice", 2, 4));
+            vHand.push_back(Card("RKO", 5, 12));
+            vHand.push_back(Card("Riposte", 2, 5));
+            vHand.push_back(Card("Brutalise", 4, 11));
+            vHand.push_back(Card("Stumble", 1, 1));
+        }
     }
     vector<Card> vHand;
     void PrintHand(vector<Card> vHand, int selected)
     {
-        
-		cout << '\t' << "___________   ___________   ___________   ___________   ___________" << endl;
-		cout << '\t' << "|         |   |         |   |         |   |         |   |         |" << endl << '\t';
-        
+        cout << endl << '\t';
+        for (int i = 0; i < vHand.size(); i++)
+        {
+            cout << "___________   ";
+        }
+        cout << endl << '\t';
+        for (int i = 0; i < vHand.size(); i++)
+        {
+            cout << "|         |   ";
+        }
+        cout << endl << '\t';
         for(int i = 0; i < vHand.size(); i++)
         {   
 			cout << '|';
@@ -169,7 +163,12 @@ public:
 			}
 			cout << "|   ";
 		}
-        cout << "\n\t" << "|_________|   |_________|   |_________|   |_________|   |_________|" << endl;
+        cout << "\n\t";
+        for (int i = 0; i < vHand.size(); i++)
+        {
+            cout << "|_________|   ";
+        }
+       
        
 
 
