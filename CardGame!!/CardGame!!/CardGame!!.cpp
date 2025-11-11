@@ -91,7 +91,9 @@
 
 using namespace std;
 
-
+string GREEN = "\033[32m";
+string RED = "\033[31m";
+string RESET = "\033[0m";
 
 
 class Card {
@@ -107,9 +109,10 @@ public:
     int Damage;  
 };
 
-class Hand {
-public:
-    Hand(string Character) 
+class Hand
+{
+ public:
+    Hand(string Character)
     {
         if (Character == "Wizard")
         {
@@ -117,7 +120,7 @@ public:
             vHand.push_back(Card("Blaze", 2, 5));
             vHand.push_back(Card("Blaze", 2, 5));
             vHand.push_back(Card("Shock", 4, 11));
-            vHand.push_back(Card("Cough", 1, 1));                     
+            vHand.push_back(Card("Cough", 1, 1));
         }
         if (Character == "Rogue")
         {
@@ -127,58 +130,90 @@ public:
             vHand.push_back(Card("Brutalise", 4, 11));
             vHand.push_back(Card("Stumble", 1, 1));
         }
+        if (Character == "Jack LLoyd")
+        {
+            vHand.push_back(Card("Chomp", 1, 20));
+            vHand.push_back(Card("Smash", 3, 59));
+            vHand.push_back(Card("Twerk", 2, 32));
+            vHand.push_back(Card("M16", 4, 68));
+            vHand.push_back(Card("Groom", 6, 100));
+        }
     }
     vector<Card> vHand;
-    void PrintHand(vector<Card> vHand, int selected)
+    void PrintHand(vector<Card> vHand)
     {
-        cout << endl << '\t';
-        for (int i = 0; i < vHand.size(); i++)
-        {
-            cout << "___________   ";
-        }
-        cout << endl << '\t';
-        for (int i = 0; i < vHand.size(); i++)
-        {
-            cout << "|         |   ";
-        }
-        cout << endl << '\t';
-        for(int i = 0; i < vHand.size(); i++)
-        {   
-			cout << '|';
-            /*float spaces = (9 - vHand.at(i).Name.length()) / 2;*/
-            int spaces = (9 - vHand.at(i).Name.length()) / 2;
-            /*if(spaces % 2 != 0)
+        int cSelected = 0;
+        while (true)
+        {           
+            system("cls");
+            cout << endl << '\t';
+            for (int i = 0; i < vHand.size(); i++)
             {
-				cout << " ";
-			}*/
-            for (int j = 0; j < spaces; j++)
+                cout << "___________   ";
+            }
+            cout << endl << '\t';
+            for (int i = 0; i < vHand.size(); i++)
             {
-                cout << " ";
+                cout << "|         |   ";
+            }
+            cout << endl << '\t';
+            for (int i = 0; i < vHand.size(); i++)
+            {
+                cout << '|';
+
+                int spaces = (9 - vHand.at(i).Name.length()) / 2;
+
+                for (int j = 0; j < spaces; j++)
+                {
+                    cout << " ";
+
+                }
+
+
+                if (i == cSelected)
+                {
+                    cout << GREEN << vHand.at(i).Name << RESET;
+                }
+                else
+                {
+                    cout << vHand.at(i).Name;
+                }
+
+                for (int j = 0; j < spaces; j++)
+                {
+                    cout << " ";
+                }
+                cout << "|   ";
+            }
+            cout << "\n\t";
+            for (int i = 0; i < vHand.size(); i++)
+            {
+                cout << "|_________|   ";
+            }
+            char key = _getch(); // Get user input without pressing Enter
+            if (key == 75) { // Left arrow key
+                cSelected = (cSelected - 1 + vHand.size()) % vHand.size();
+            }
+            else if (key == 77) { // Right arrow key
+                cSelected = (cSelected + 1) % vHand.size();
+            }
+            else if (key == '\r') { // Enter key
+                system("cls");
+                cout << "You played " << vHand.at(cSelected).Name << " dealing " << vHand.at(cSelected).Damage << " damage!" << endl;
+				break;
+                /*Hand H(options[selected]);
+                H.PrintHand(H.vHand, 0);*/
 
             }
-            cout << vHand.at(i).Name;
-            for (int j = 0; j < spaces; j++)
-            {
-                cout << " ";
-			}
-			cout << "|   ";
-		}
-        cout << "\n\t";
-        for (int i = 0; i < vHand.size(); i++)
-        {
-            cout << "|_________|   ";
+
+            /*cout << "Name is " << Name << endl;
+            cout << "Mana cost is " << ManaCost << endl;
+            cout << "Damage is " << Damage << endl;*/
         }
-       
-       
-
-
-        /*cout << "Name is " << Name << endl;
-        cout << "Mana cost is " << ManaCost << endl;
-        cout << "Damage is " << Damage << endl;*/
-    }
 
 
 
+    };
 };
  
 
@@ -214,7 +249,7 @@ void characterSelection()
         else if (key == '\r') { // Enter key
             system("cls");
             Hand H (options[selected]);
-			H.PrintHand(H.vHand, 0);
+			H.PrintHand(H.vHand);
 
             //game loop - move?
             while (true)
@@ -276,6 +311,7 @@ int main()
             system("pause");*/
         }
     }
+
 
     return 0;
 }
