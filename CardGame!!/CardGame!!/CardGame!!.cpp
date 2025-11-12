@@ -507,6 +507,8 @@ using namespace std;
  //    string b;
  //};
 //string ArrayOfGraphics[] = {Rogue, WizardCat, JackLloyd};
+
+
 class player
 { public:
     string name;
@@ -539,6 +541,31 @@ class enemy
 
 
 };
+
+player Player;
+enemy Goblin;
+
+bool IsDead(player pHealth, enemy eHealth)
+{
+    if (pHealth.health <= 0)
+    {
+        system("cls");
+        cout << "YOU DIED" << endl;
+		_getch();
+        return true;
+    }
+    if (eHealth.health <= 0)
+    {
+        system("cls");
+        cout << "YOU OBLITERATED THE ENEMY" << endl;
+		_getch();
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 class Card {
 public:
     Card(string n, int m, int d) {
@@ -584,7 +611,8 @@ class Hand
     }
     vector<Card> vHand;
     void PrintHand(vector<Card> vHand)
-    {
+	{
+		
         int cSelected = 0;
         while (true)
         {           
@@ -653,10 +681,9 @@ class Hand
             else if (key == '\r') { // Enter key
                 system("cls");
                 cout << "You played " << vHand.at(cSelected).Name << " dealing " << vHand.at(cSelected).Damage << " damage!" << endl;
-				enemy Goblin;
 				cout <<  Goblin.name << " has " << Goblin.eTakeDamage(vHand.at(cSelected).Damage) << " health remaining!" << endl;
 				_getch();
-
+                IsDead(Player, Goblin);
                     continue;
 
                 /*Hand H(options[selected]);
