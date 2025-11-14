@@ -93,6 +93,9 @@ using namespace std;
 
 #define GREEN  "\033[32m"
 #define RED  "\033[31m"
+#define MAGENTA  "\033[35m"
+#define BOLD  "\033[1m"
+#define UNDERLINE  "\033[4m"
 #define RESET  "\033[0m"
 
 //string Rogue = R"(
@@ -509,6 +512,7 @@ using namespace std;
 //string ArrayOfGraphics[] = {Rogue, WizardCat, JackLloyd};
 int Turn = 1;
 int Round = 1;
+int ManaIndex = 1;
 class player
 { public:
 
@@ -637,7 +641,22 @@ public:
     int ManaCost;
     int Damage;  
 };
+Card Curse ("Curse", 3, 9);
+Card Blaze ("Blaze", 2, 5);
+Card Shock ("Shock", 4, 11);
+Card Cough ("Cough", 1, 1);
 
+Card SLice ("Slice", 2, 4);
+Card RKO ("RKO", 5, 12);
+Card Riposte ("Riposte", 2, 5);
+Card Brutalise("Brutalise", 4, 11);
+Card Stumble ("Stumble", 1, 1);
+
+vHand.push_back(Card("Chomp", 1, 20));
+vHand.push_back(Card("Smash", 3, 59));
+vHand.push_back(Card("Twerk", 2, 32));
+vHand.push_back(Card("M16", 4, 68));
+vHand.push_back(Card("Groom", 6, 100));
 class Hand
 {
 public:
@@ -645,7 +664,7 @@ public:
     {
         if (Character == "Wizard")
         {
-            vHand.push_back(Card("Curse", 3, 9));
+            vHand.push_back(Curse);
             vHand.push_back(Card("Blaze", 2, 5));
             vHand.push_back(Card("Blaze", 2, 5));
             vHand.push_back(Card("Shock", 4, 11));
@@ -672,9 +691,11 @@ public:
     void PrintHand(vector<Card> vHand)
     {
 
-        int cSelected = 0;
+        int cHover = 0;
+		int cSelected = 0;
         while (true)
-        {
+		{
+            vector<Card> SelectedCards;
             if (Turn % 2 == 0)//enemy turn
             {
 
@@ -685,9 +706,9 @@ public:
                 int enemyDamage = rand() % 10 + 5; // Random damage between 5 and 15
                 cout << "The " << Goblin.name << " attacks you for " << enemyDamage << " damage!" << endl;
                 Player.pTakeDamage(enemyDamage);
-                cout << "You have " << Player.health << " health remaining!" << endl;
-				Turn++;
+                cout << "You have " << Player.health << " health remaining!" << endl;		
                 _getch();
+				Turn++;
                 if(IsDead(Player, Goblin, Round, Turn))
                 {
 					_getch();
@@ -722,9 +743,9 @@ public:
                     }
 
 
-                    if (i == cSelected)
+                    if (i == cHover)
                     {
-                        cout << GREEN << vHand.at(i).Name << RESET;
+                        cout << UNDERLINE << GREEN <<  BOLD << vHand.at(i).Name << RESET;
                     }
                     else
                     {
@@ -752,18 +773,38 @@ public:
                 {
                     cout << "|_________|   ";
                 }
+                cout << "\n\n\t\t\t\t\t(" << Player.mana << ")\n";
                 char key = _getch(); // Get user input without pressing Enter
                 if (key == 75) { // Left arrow key
-                    cSelected = (cSelected - 1 + vHand.size()) % vHand.size();
+                    cHover = (cHover - 1 + vHand.size()) % vHand.size();
                 }
                 else if (key == 77) { // Right arrow key
-                    cSelected = (cSelected + 1) % vHand.size();
+                    cHover = (cHover + 1) % vHand.size();
                 }
+                else if (key == 32)
+                {
+                    
+
+
+
+
+                } // Space key
+       
                 else if (key == '\r') { // Enter key
+                    if(Player.mana < vHand.at(cHover).ManaCost)
+                    {
+                        system("cls");
+						cout << "Not enough mana to play " << vHand.at(cHover).Name << "!" << endl;
+                        _getch();
+                        continue;
+					}
                     system("cls");
-                    cout << "You played " << vHand.at(cSelected).Name << " dealing " << vHand.at(cSelected).Damage << " damage!" << endl;
-                    cout << Goblin.name << " has " << Goblin.eTakeDamage(vHand.at(cSelected).Damage) << " health remaining!" << endl;
-					Turn++;
+                    cout << "You played " << vHand.at(cHover).Name << " dealing " << vHand.at(cHover).Damage << " damage!" << endl;
+                    cout << Goblin.name << " has " << Goblin.eTakeDamage(vHand.at(cHover).Damage) << " health remaining!" << endl;
+					Player.mana -= vHand.at(cHover).ManaCost;
+                    Player.mana += ManaIndex;
+					ManaIndex++;
+                    Turn++;
 					_getch();
                     if (IsDead(Player, Goblin, Round, Turn))
                     {
