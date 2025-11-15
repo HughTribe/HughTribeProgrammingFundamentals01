@@ -13,9 +13,16 @@ using namespace std;
 #define MAGENTA  "\033[35m"
 #define BOLD  "\033[1m"
 #define UNDERLINE  "\033[4m"
+#define FLASHING  "\033[5m"
 #define RESET  "\033[0m"
 
-
+enum GameState
+{
+    PlayerDead,
+    EnemyDead,
+    PlayerAlive,
+    EnemyAlive
+};
 int Turn = 1;
 int Round = 1;
 int ManaIndex = 1;
@@ -61,7 +68,7 @@ class enemy
 
 enemy Goblin("Goblin", 30);
 
-bool IsDead(player& Player, enemy& Goblin, int& Round, int& Turn)
+GameState IsDead(player& Player, enemy& Goblin, int& Round, int& Turn)
 {
     if (Player.health <= 0)
     {
@@ -119,8 +126,10 @@ $$         $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 		Round = 1;
 		Player.health = 100;
 		Goblin.health = 30;
+		Player.mana = 5;
+		ManaIndex = 1;
         
-        return true;
+        return PlayerDead;
     }
     if (Goblin.health <= 0)
     {
@@ -129,15 +138,19 @@ $$         $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
         Goblin.health = 30;
 		Turn = 1;
         Round++;
+        Player.mana = 5;
+        ManaIndex = 1;
 		
-        return true;
+        return EnemyDead;
     }
-    return false;
+    return PlayerAlive;
     
 }
-class Card {
-public:
-    Card(string n, int m, int d) {
+class Card 
+{
+  public:
+    Card(string n, int m, int d) 
+    {
 
         Name = n;
         ManaCost = m;
@@ -173,7 +186,7 @@ Card Groom ("Groom", 6, 100);
 
 class Hand
 {
-public:
+ public:
     Hand(string Character)
     {
         if (Character == "Wizard")
@@ -208,172 +221,208 @@ public:
         int cHover = 0;
         vector<Card> SelectedCards;
         while (true)
-		{
-            
+        {
+
             if (Turn % 2 == 0)//enemy turn
             {
 
                 system("cls");
                 cout << "Enemy's Turn! Press any key to continue..." << endl;
                 _getch();
-				system("cls");
+                system("cls");
                 int enemyDamage = rand() % 10 + 5; // Random damage between 5 and 15
                 cout << "The " << Goblin.name << " attacks you for " << enemyDamage << " damage!" << endl;
                 Player.pTakeDamage(enemyDamage);
-                cout << "You have " << Player.health << " health remaining!" << endl;		
-                _getch();
-				Turn++;
-                if(IsDead(Player, Goblin, Round, Turn))
-                {
-					_getch();
-                    continue;
-                }
-               
+                cout << "You have " << Player.health << " health remaining!" << endl;
+                Turn++;
+                IsDead(Player, Goblin, Round, Turn);
+                 _getch();
+                 continue;
+                
+
             }
-			else //player turn
+            else //player turn
             {
                 system("cls");
                 cout << endl << '\t';
                 for (int i = 0; i < vHand.size(); i++)
                 {
-                    cout << "___________   ";
-                }
-                cout << endl << '\t';
-                for (int i = 0; i < vHand.size(); i++)
-                {
-                    cout << "|   (" << vHand.at(i).ManaCost << ")   |   ";
-                }
-                cout << endl << '\t';
-                for (int i = 0; i < vHand.size(); i++)
-                {
-                    cout << '|';
-
-                    int spaces = (9 - vHand.at(i).Name.length()) / 2;
-
-                    for (int j = 0; j < spaces; j++)
-                    {
-                        cout << " ";
-
-                    }
-
-
                     if (i == cHover)
                     {
-                        cout << UNDERLINE << GREEN <<  BOLD << vHand.at(i).Name << RESET;
-                    }
-                    else
-					{
-						auto target = vHand.at(i);
-                        auto it = std::find(SelectedCards.begin(), SelectedCards.end(), target);
-                        if (it != SelectedCards.end()) 
-                        {
-
-                            cout << UNDERLINE << RED << BOLD << vHand.at(i).Name << RESET;
-                        }
-                        
-                        else 
-                        {
-                            cout << vHand.at(i).Name;
-                        }
-                    }
-
-                    for (int j = 0; j < spaces; j++)
-                    {
-                        cout << " ";
-                    }
-                    cout << "|   ";
-                }
-
-                for (int i = 0; i < 3; i++)
-                {
-                    cout << "\n\t";
-                    for (int j = 0; j < vHand.size(); j++)
-                    {
-                        cout << "|         |   ";
-                    }
-                }
-
-                cout << "\n\t";
-                for (int i = 0; i < vHand.size(); i++)
-                {
-                    cout << "|_________|   ";
-                }
-                cout << "\n\n\t\t\t\t\t(" << Player.mana << ")\n";
-                char key = _getch(); // Get user input without pressing Enter
-                if (key == 75) { // Left arrow key
-                    cHover = (cHover - 1 + vHand.size()) % vHand.size();
-                }
-                else if (key == 77) { // Right arrow key
-                    cHover = (cHover + 1) % vHand.size();
-                }
-                else if (key == 32)
-                {
-                    if (Player.mana < vHand.at(cHover).ManaCost)
-                    {
-                        system("cls");
-                        cout << "Not enough mana to play " << vHand.at(cHover).Name << "!" << endl;
-                        _getch();
+                        cout << GREEN << BOLD << "___________   " << RESET;
                         continue;
                     }
-                    SelectedCards.push_back(vHand.at(cHover));
-					Player.mana -= vHand.at(cHover).ManaCost;
-					continue;
-
-                } // Space key
-       
-                else if (key == '\r') { // Enter key
-					string ListofSelectedCards = "";
-                    for (const auto& card : SelectedCards)
+                    else
                     {
-                        ListofSelectedCards += card.Name + ", ";
-                       
-					}
-                    //total damage of selected cards
-                    int cSelectedDamage = 0;
-                    for(const auto& card : SelectedCards)
-                    {                     
-                        cSelectedDamage += card.Damage;
-					}
-                    system("cls");
-                    cout << "You played " << ListofSelectedCards << " dealing " <<  cSelectedDamage<< " damage!" << endl;
-                    cout << Goblin.name << " has " << Goblin.eTakeDamage(cSelectedDamage) << " health remaining!" << endl;					
-					int cSelectedMana = 0;
-                    for (const auto& card : SelectedCards)
-                    {
-                        cSelectedMana += card.ManaCost;
+                        cout << "___________   ";
                     }
-					Player.mana -= cSelectedMana;
-                    Player.mana += ManaIndex;
-					ManaIndex++;
-                    Turn++;
-                    SelectedCards.clear();
-					_getch();
-                    if (IsDead(Player, Goblin, Round, Turn))
-                    {
-						_getch();
-						continue;
-                    }
-                    
-
 
                 }
+                cout << endl << '\t';
+                for (int i = 0; i < vHand.size(); i++)
+                {
+                    if (i == cHover)
+                    {
+                        cout << GREEN << BOLD << "|   (" << vHand.at(i).ManaCost << ")   |   " << RESET;
+                        continue;
+                    }
+
+                    else
+                    {
+                        cout << "|   (" << vHand.at(i).ManaCost << ")   |   ";
+                    }
+                }
+                    cout << endl << '\t';
+                    for (int i = 0; i < vHand.size(); i++)
+                    {
+                        if (i == cHover)
+                        {
+                            cout <<  GREEN << BOLD << '|' << RESET;
+                        }
+                        else
+                        {    
+                            cout << '|';
+                        }
+
+                        int spaces = (9 - vHand.at(i).Name.length()) / 2;
+
+                        for (int j = 0; j < spaces; j++)
+                        {
+                            cout << " ";
+
+                        }
 
 
-                /*Hand H(options[selected]);
-                H.PrintHand(H.vHand, 0);*/
+                        if (i == cHover)
+                        {
+                            cout << UNDERLINE << GREEN << BOLD << vHand.at(i).Name << RESET;
+                        }
+                        else
+                        {
+                            auto target = vHand.at(i);
+                            auto it = std::find(SelectedCards.begin(), SelectedCards.end(), target);
+                            if (it != SelectedCards.end())
+                            {
 
+                                cout << UNDERLINE << RED << BOLD << FLASHING << vHand.at(i).Name << RESET;
+                            }
 
+                            else
+                            {
+                                cout << vHand.at(i).Name;
+                            }
+                        }
 
-                /*cout << "Name is " << Name << endl;
-                cout << "Mana cost is " << ManaCost << endl;
-                cout << "Damage is " << Damage << endl;*/
+                        for (int j = 0; j < spaces; j++)
+                        {
+                            cout << " ";
+                        }
+                        if (i == cHover)
+                        {
+                            cout << GREEN << BOLD << "|   " << RESET;
+                        }
+                        else
+                        {
+                            cout << "|   ";
+                        }
+                    }
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        cout << "\n\t";
+                        for (int j = 0; j < vHand.size(); j++)
+                        {
+                            if (j == cHover)
+                            {
+                                cout << GREEN << BOLD "|         |   " << RESET;
+                            }
+                            else
+                            {   
+                                cout << "|         |   ";
+							}
+                           
+                        }
+                    }
+
+                    cout << "\n\t";
+                    for (int i = 0; i < vHand.size(); i++)
+                    {
+                        if (i == cHover)
+                        {
+                            cout << GREEN << BOLD << "|_________|   " << RESET;
+                        }
+                        else
+                        {
+                            cout << "|_________|   ";
+                        }
+                    }
+                    
+                    cout << "\n\n\t\t\t\t\t(" << Player.mana << ")\n";
+                    char key = _getch(); // Get user input without pressing Enter
+                    if (key == 75) { // Left arrow key
+                        cHover = (cHover - 1 + vHand.size()) % vHand.size();
+                    }
+                    else if (key == 77) { // Right arrow key
+                        cHover = (cHover + 1) % vHand.size();
+                    }
+                    else if (key == 32)
+                    {
+                        if (Player.mana < vHand.at(cHover).ManaCost)
+                        {
+                            system("cls");
+                            cout << "Not enough mana to play " << vHand.at(cHover).Name << "!" << endl;
+                            _getch();
+                            continue;
+                        }
+                        SelectedCards.push_back(vHand.at(cHover));
+                        Player.mana -= vHand.at(cHover).ManaCost;
+                        continue;
+
+                    } // Space key
+
+                    else if (key == '\r') { // Enter key
+                        string ListofSelectedCards = ""; //names of selected cards
+                        int cSelectedDamage = 0; //total damage of selected cards
+                        int LastIndex = SelectedCards.size() - 1;
+                        for (int i = 0; i < SelectedCards.size(); i++)
+                        {
+                            if (i == LastIndex - 1)
+                            {
+                                ListofSelectedCards += SelectedCards.at(i).Name + " and ";
+                                continue;
+                            }
+                            else if (i == LastIndex)
+                            {
+                                ListofSelectedCards += SelectedCards.at(i).Name;
+                                continue;
+                            }
+                            else
+                            {
+                                ListofSelectedCards += SelectedCards.at(i).Name + ", ";
+                            }
+
+                            cSelectedDamage += SelectedCards.at(i).Damage;
+
+                        }
+
+                        system("cls");
+                        cout << "You played " << ListofSelectedCards << " dealing " << cSelectedDamage << " damage!" << endl;
+                        cout << Goblin.name << " has " << Goblin.eTakeDamage(cSelectedDamage) << " health remaining!" << endl;
+                        Player.mana += ManaIndex;
+                        ManaIndex++;
+                        Turn++;
+                        SelectedCards.clear();
+                        _getch();
+                        IsDead(Player, Goblin, Round, Turn);
+                            continue;
+                        
+                    }
+                
             }
-
-
-
-        };
-    };
+        }
+    }
 };
+
 
 
     void displayMenu(const string options[], int size, int selected, string extra)
