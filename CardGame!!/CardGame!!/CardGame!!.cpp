@@ -336,11 +336,17 @@ public:
 					}
                     system("cls");
                     cout << "You played " << ListofSelectedCards << " dealing " <<  cSelectedDamage<< " damage!" << endl;
-                    cout << Goblin.name << " has " << Goblin.eTakeDamage(cSelectedDamage) << " health remaining!" << endl;
-					Player.mana -= vHand.at(cHover).ManaCost;
+                    cout << Goblin.name << " has " << Goblin.eTakeDamage(cSelectedDamage) << " health remaining!" << endl;					
+					int cSelectedMana = 0;
+                    for (const auto& card : SelectedCards)
+                    {
+                        cSelectedMana += card.ManaCost;
+                    }
+					Player.mana -= cSelectedMana;
                     Player.mana += ManaIndex;
 					ManaIndex++;
                     Turn++;
+                    SelectedCards.clear();
 					_getch();
                     if (IsDead(Player, Goblin, Round, Turn))
                     {
