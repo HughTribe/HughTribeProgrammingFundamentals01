@@ -26,6 +26,7 @@ enum GameState
 int Turn = 1;
 int Round = 1;
 int ManaIndex = 1;
+int PositionOfSelectedCard;
 class player
 { public:
 
@@ -214,12 +215,41 @@ class Hand
             vHand.push_back(Groom);
         }
     }
+    bool IsCardSelected(vector<Card> SelectedCards, vector<Card> Hand, int i)
+    {    
+
+        for (int j = 0; j < SelectedCards.size(); j++ ) 
+        {
+            if (SelectedCards.at(j) == vHand.at(i))
+            {
+				PositionOfSelectedCard = j;
+				return true;
+            }
+            
+        }
+
+		return false;
+        
+        
+        /*auto target = vHand.at(i);
+        auto it = std::find(SelectedCards.begin(), SelectedCards.end(), target);
+        if (it != SelectedCards.end())
+        {
+
+            return true;
+        }
+        else
+        {
+            return false;
+		}*/
+    }
     vector<Card> vHand;
     void PrintHand(vector<Card> vHand)
     {
 
         int cHover = 0;
         vector<Card> SelectedCards;
+
         while (true)
         {
 
@@ -293,25 +323,26 @@ class Hand
                         }
 
 
-                        if (i == cHover)
-                        {
-                            cout << UNDERLINE << GREEN << BOLD << vHand.at(i).Name << RESET;
-                        }
-                        else
-                        {
-                            auto target = vHand.at(i);
-                            auto it = std::find(SelectedCards.begin(), SelectedCards.end(), target);
-                            if (it != SelectedCards.end())
+                        
+                        
+                            
+                            if (IsCardSelected(SelectedCards, vHand, i))
                             {
 
                                 cout << UNDERLINE << RED << BOLD << FLASHING << vHand.at(i).Name << RESET;
+                                
+                            }
+                        
+                            else if (i == cHover)
+                            {
+                                cout << UNDERLINE << GREEN << BOLD << vHand.at(i).Name << RESET;
                             }
 
                             else
                             {
                                 cout << vHand.at(i).Name;
                             }
-                        }
+                        
 
                         for (int j = 0; j < spaces; j++)
                         {
@@ -367,16 +398,27 @@ class Hand
                     }
                     else if (key == 32)
                     {
-                        if (Player.mana < vHand.at(cHover).ManaCost)
+                        if (IsCardSelected(SelectedCards, vHand, cHover))
                         {
-                            system("cls");
-                            cout << "Not enough mana to play " << vHand.at(cHover).Name << "!" << endl;
-                            _getch();
+                            SelectedCards.erase(SelectedCards.begin() + PositionOfSelectedCard);
+                            Player.mana += vHand.at(cHover).ManaCost;
                             continue;
                         }
-                        SelectedCards.push_back(vHand.at(cHover));
-                        Player.mana -= vHand.at(cHover).ManaCost;
-                        continue;
+                        else
+                        {
+                            if (Player.mana < vHand.at(cHover).ManaCost)
+                            {
+                                system("cls");
+                                cout << "Not enough mana to play " << vHand.at(cHover).Name << "!" << endl;
+                                _getch();
+                                continue;
+                            }
+                            SelectedCards.push_back(vHand.at(cHover));
+                            Player.mana -= vHand.at(cHover).ManaCost;
+                            continue;
+                        }
+                        
+                        
 
                     } // Space key
 
@@ -389,12 +431,12 @@ class Hand
                             if (i == LastIndex - 1)
                             {
                                 ListofSelectedCards += SelectedCards.at(i).Name + " and ";
-                                continue;
+                                
                             }
                             else if (i == LastIndex)
                             {
                                 ListofSelectedCards += SelectedCards.at(i).Name;
-                                continue;
+                                
                             }
                             else
                             {
@@ -402,7 +444,7 @@ class Hand
                             }
 
                             cSelectedDamage += SelectedCards.at(i).Damage;
-
+                            continue;
                         }
 
                         system("cls");
