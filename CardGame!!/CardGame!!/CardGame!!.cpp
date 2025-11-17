@@ -5,6 +5,7 @@
 #include <conio.h> // For _getch()
 #include <vector>
 #include <algorithm>
+#include <random>
 
 using namespace std;
 
@@ -171,6 +172,7 @@ Card Curse ("Curse", 3, 9);
 Card Blaze ("Blaze", 2, 5);
 Card Shock ("Shock", 4, 11);
 Card Cough ("Cough", 1, 1);
+Card LightSpam("LightSpam", 1, 11);
 
 Card Slice ("Slice", 2, 4);
 Card RKO ("RKO", 5, 12);
@@ -184,13 +186,70 @@ Card Twerk ("Twerk", 2, 32);
 Card M16 ("M16", 4, 68);
 Card Groom ("Groom", 6, 100);
 
+class Deck
+{
+ public:
+    vector<Card> vDeck;
+    Deck(string Character)
+    {
+
+        if (Character == "Wizard")
+        {
+            vDeck.push_back(Curse);
+            vDeck.push_back(Curse);
+            vDeck.push_back(Curse);
+            vDeck.push_back(Blaze);
+            vDeck.push_back(Blaze);
+            vDeck.push_back(Blaze);
+            vDeck.push_back(Shock);
+            vDeck.push_back(Shock);
+            vDeck.push_back(Shock);
+            vDeck.push_back(Cough);
+            vDeck.push_back(Cough);
+            vDeck.push_back(Cough);
+            vDeck.push_back(Cough);
+            vDeck.push_back(LightSpam);
+            vDeck.push_back(LightSpam);
+        }
+        if (Character == "Rogue")
+        {
+            vDeck.push_back(Slice);
+            vDeck.push_back(RKO);
+            vDeck.push_back(Riposte);
+            vDeck.push_back(Brutalise);
+            vDeck.push_back(Stumble);
+        }
+        if (Character == "Jack LLoyd")
+        {
+            vDeck.push_back(Chomp);
+            vDeck.push_back(Smash);
+            vDeck.push_back(Twerk);
+            vDeck.push_back(M16);
+            vDeck.push_back(Groom);
+		}
+    }
+};
 
 class Hand
 {
  public:
-    Hand(string Character)
+     vector<Card> vHand;
+	 Hand(string Character, vector<Card> vDeck, vector<Card> Vhand)
     {
-        if (Character == "Wizard")
+        
+        // Initialize random number generator
+        std::random_device rd; // Obtain a random seed
+        std::mt19937 gen(rd()); // Seed the generator
+        std::uniform_int_distribution<> distr(0, vDeck.size() - 1); // Define range
+
+        // Get a random index and element
+        int randomIndex = distr(gen);
+        Vhand.push_back(vDeck.at(randomIndex));
+		vDeck.erase(vDeck.begin() + randomIndex);
+
+        
+        
+       /* if (Character == "Wizard")
         {
             vHand.push_back(Curse);
             vHand.push_back(Blaze);
@@ -213,7 +272,7 @@ class Hand
             vHand.push_back(Twerk);
             vHand.push_back(M16);
             vHand.push_back(Groom);
-        }
+        }*/
     }
     bool IsCardSelected(vector<Card> SelectedCards, vector<Card> Hand, int i)
     {    
@@ -243,7 +302,7 @@ class Hand
             return false;
 		}*/
     }
-    vector<Card> vHand;
+   
     void PrintHand(vector<Card> vHand)
     {
 
@@ -507,7 +566,7 @@ class Hand
                     break;
                 }
                 system("cls");
-                Hand H(options[selected]);
+                Hand H(options[selected], vDeck, vHand);
                 H.PrintHand(H.vHand);
 
                 //game loop - move?
