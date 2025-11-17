@@ -484,8 +484,8 @@ class Hand
 
     void characterSelection()
     {
-        const int optionCount = 3;
-        string options[optionCount] = { "Rogue", "Wizard", "Jack LLoyd" };
+        const int optionCount = 4;
+        string options[optionCount] = { "Rogue", "Wizard", "Jack LLoyd", "Exit" };
         int selected = 0;
         /* bool ChosenClass = true;*/
         while (true)
@@ -502,6 +502,10 @@ class Hand
                 selected = (selected + 1) % optionCount;
             }
             else if (key == '\r') { // Enter key
+                if (options[selected] == "Exit")
+                {
+                    break;
+                }
                 system("cls");
                 Hand H(options[selected]);
                 H.PrintHand(H.vHand);
