@@ -189,10 +189,10 @@ Card Groom ("Groom", 6, 100);
 class Deck
 {
  public:
-    vector<Card> vDeck;
+	 vector<Card> vDeck;
     Deck(string Character)
     {
-
+        
         if (Character == "Wizard")
         {
             vDeck.push_back(Curse);
@@ -230,23 +230,25 @@ class Deck
     }
 };
 
+
 class Hand
 {
  public:
      vector<Card> vHand;
-	 Hand(string Character, vector<Card> vDeck, vector<Card> Vhand)
-    {
-        
-        // Initialize random number generator
-        std::random_device rd; // Obtain a random seed
-        std::mt19937 gen(rd()); // Seed the generator
-        std::uniform_int_distribution<> distr(0, vDeck.size() - 1); // Define range
+     Hand(string Character, vector <Card>& vDeck)
+     {
 
-        // Get a random index and element
-        int randomIndex = distr(gen);
-        Vhand.push_back(vDeck.at(randomIndex));
-		vDeck.erase(vDeck.begin() + randomIndex);
-
+         for (int i = 0; i < 5; i++)
+         {
+             // Initialize random number generator
+             std::random_device rd; // Obtain a random seed
+             std::mt19937 gen(rd()); // Seed the generator
+             std::uniform_int_distribution<> distr(0, vDeck.size() - 1); // Define range
+            // Get a random index and element
+            int randomIndex = distr(gen);
+            vHand.push_back(vDeck.at(randomIndex));
+            vDeck.erase(vDeck.begin() + randomIndex);
+         }
         
         
        /* if (Character == "Wizard")
@@ -303,7 +305,7 @@ class Hand
 		}*/
     }
    
-    void PrintHand(vector<Card> vHand)
+    void PrintHand()
     {
 
         int cHover = 0;
@@ -566,14 +568,11 @@ class Hand
                     break;
                 }
                 system("cls");
-                Hand H(options[selected], vDeck, vHand);
-                H.PrintHand(H.vHand);
+				Deck D(options[selected]);
+                Hand H(options[selected], D.vDeck);
+                H.PrintHand();
 
-                //game loop - move?
-                while (true)
-                {
-
-                }
+               
 
 
                 /*if (options[selected] == "Exit") break;
