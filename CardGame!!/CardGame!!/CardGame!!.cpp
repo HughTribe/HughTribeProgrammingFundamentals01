@@ -17,6 +17,10 @@ using namespace std;
 #define FLASHING  "\033[5m"
 #define RESET  "\033[0m"
 
+// Initialize random number generator
+std::random_device rd; // Obtain a random seed
+std::mt19937 gen(rd()); // Seed the generator
+
 enum GameState
 {
     PlayerDead,
@@ -236,46 +240,28 @@ class Hand
  public:
      vector<Card> vHand;
      Hand(string Character, vector <Card>& vDeck)
-     {
+     {   
+         
+         std::uniform_int_distribution<> distr(0, vDeck.size() - 1); // Define range
 
          for (int i = 0; i < 5; i++)
          {
-             // Initialize random number generator
-             std::random_device rd; // Obtain a random seed
-             std::mt19937 gen(rd()); // Seed the generator
-             std::uniform_int_distribution<> distr(0, vDeck.size() - 1); // Define range
+            
             // Get a random index and element
             int randomIndex = distr(gen);
             vHand.push_back(vDeck.at(randomIndex));
             vDeck.erase(vDeck.begin() + randomIndex);
-         }
-        
-        
-       /* if (Character == "Wizard")
-        {
-            vHand.push_back(Curse);
-            vHand.push_back(Blaze);
-            vHand.push_back(Blaze);
-            vHand.push_back(Shock);
-            vHand.push_back(Cough);
-        }
-        if (Character == "Rogue")
-        {
-            vHand.push_back(Slice);
-            vHand.push_back(RKO);
-            vHand.push_back(Riposte);
-            vHand.push_back(Brutalise);
-            vHand.push_back(Stumble);
-        }
-        if (Character == "Jack LLoyd")
-        {
-            vHand.push_back(Chomp);
-            vHand.push_back(Smash);
-            vHand.push_back(Twerk);
-            vHand.push_back(M16);
-            vHand.push_back(Groom);
-        }*/
+         }                     
+     
     }
+     void DrawCard(vector <Card>& vDeck)
+     {
+         std::uniform_int_distribution<> distr(0, vDeck.size() - 1); // Define range
+         int randomIndex = distr(gen);
+         vHand.push_back(vDeck.at(randomIndex));
+         vDeck.erase(vDeck.begin() + randomIndex);
+
+     }
     bool IsCardSelected(vector<Card> SelectedCards, vector<Card> Hand, int i)
     {    
 
@@ -305,7 +291,7 @@ class Hand
 		}*/
     }
    
-    void PrintHand()
+    void PrintHand(Deck& D)
     {
 
         int cHover = 0;
@@ -426,7 +412,7 @@ class Hand
                         {
                             if (j == cHover)
                             {
-                                cout << GREEN << BOLD "|         |   " << RESET;
+                                cout << GREEN << BOLD << "|         |   " << RESET;
                             }
                             else
                             {   
@@ -492,12 +478,12 @@ class Hand
                             if (i == LastIndex - 1)
                             {
                                 ListofSelectedCards += SelectedCards.at(i).Name + " and ";
-                                
+
                             }
                             else if (i == LastIndex)
                             {
                                 ListofSelectedCards += SelectedCards.at(i).Name;
-                                
+
                             }
                             else
                             {
@@ -514,7 +500,22 @@ class Hand
                         Player.mana += ManaIndex;
                         ManaIndex++;
                         Turn++;
+                        for (int i = 0; i < SelectedCards.size(); i++)
+                        {
+                            //remove played cards from hand
+                            auto target = SelectedCards.at(i);
+                            auto it = std::find(vHand.begin(), vHand.end(), target);
+                            if (it != vHand.end())
+                            {
+                                vHand.erase(it);
+                                D.vDeck.push_back(target);
+                            }
+                        }
                         SelectedCards.clear();
+                        if (vHand.size() < 7)
+                        {
+                          DrawCard(D.vDeck);
+                        }
                         _getch();
                         IsDead(Player, Goblin, Round, Turn);
                             continue;
@@ -570,7 +571,7 @@ class Hand
                 system("cls");
 				Deck D(options[selected]);
                 Hand H(options[selected], D.vDeck);
-                H.PrintHand();
+                H.PrintHand(D);
 
                
 
