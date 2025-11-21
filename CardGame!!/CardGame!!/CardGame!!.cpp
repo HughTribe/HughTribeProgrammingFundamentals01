@@ -155,16 +155,18 @@ $$         $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 class Card 
 {
   public:
-    Card(string n, int m, int d) 
+    Card(string n, int m, int d, int h) 
     {
 
         Name = n;
         ManaCost = m;
         Damage = d;
+        Heal = h;
     }
     string Name;
     int ManaCost;
     int Damage;  
+	int Heal;
     friend bool operator== (const Card& lhs, const Card& rhs) 
     {
         return lhs.Name == rhs.Name
@@ -172,33 +174,35 @@ class Card
             && lhs.Damage == rhs.Damage;
     }
 };
-Card Curse1 ("Curse", 3, 9);
-Card Curse2 ("Curse", 3, 9);
-Card Curse3 ("Curse", 3, 9);
-Card Blaze1 ("Blaze", 2, 5);
-Card Blaze2 ("Blaze", 2, 5);
-Card Blaze3 ("Blaze", 2, 5);
-Card Shock1 ("Shock", 4, 11);
-Card Shock2 ("Shock", 4, 11);
-Card Shock3 ("Shock", 4, 11);
-Card Cough1 ("Cough", 1, 1);
-Card Cough2("Cough", 1, 1);
-Card Cough3("Cough", 1, 1);
-Card Cough4("Cough", 1, 1);
-Card LightSpam1 ("LightSpam", 1, 11);
-Card LightSpam2("LightSpam", 1, 11);
+Card Curse1 ("Curse", 3, 9, 0);
+Card Curse2 ("Curse", 3, 9, 0);
+Card Curse3 ("Curse", 3, 9, 0);
+Card Blaze1 ("Blaze", 2, 5, 0);
+Card Blaze2 ("Blaze", 2, 5, 0);
+Card Blaze3 ("Blaze", 2, 5, 0);
+Card Shock1 ("Shock", 4, 11, 0);
+Card Shock2 ("Shock", 4, 11, 0);
+Card Shock3 ("Shock", 4, 11, 0);
+Card Cough1 ("Cough", 1, 1, 0);
+Card Cough2("Cough", 1, 1, 0);
+Card Cough3("Cough", 1, 1, 0);
+Card Cough4("Cough", 1, 1, 0);
+Card LightSpam1 ("LightSpam", 1, 11, 0);
+Card LightSpam2("LightSpam", 1, 11, 0);
+Card Restore1("Restore", 2, 0, 10);
+Card Restore2("Restore", 2, 0, 10);
 
-Card Slice ("Slice", 2, 4);
-Card RKO ("RKO", 5, 12);
-Card Riposte ("Riposte", 2, 5);
-Card Brutalise("Brutalise", 4, 11);
-Card Stumble ("Stumble", 1, 1);
+Card Slice ("Slice", 2, 4, 0);
+Card RKO ("RKO", 5, 12, 0);
+Card Riposte ("Riposte", 2, 5, 0);
+Card Brutalise("Brutalise", 4, 11, 0);
+Card Stumble ("Stumble", 1, 1, 0);
 
-Card Chomp ("Chomp", 1, 20);
-Card Smash ("Smash", 3, 59);
-Card Twerk ("Twerk", 2, 32);
-Card M16 ("M16", 4, 68);
-Card Groom ("Groom", 6, 100);
+Card Chomp ("Chomp", 1, 20, 0);
+Card Smash ("Smash", 3, 59, 0);
+Card Twerk ("Twerk", 2, 32, 0);
+Card M16 ("M16", 4, 68, 0);
+Card Groom ("Groom", 6, 100, 0);
 
 class Deck
 {
@@ -224,6 +228,8 @@ class Deck
             vDeck.push_back(Cough4);
             vDeck.push_back(LightSpam1);
             vDeck.push_back(LightSpam2);
+			vDeck.push_back(Restore1);
+			vDeck.push_back(Restore2);
         }
         if (Character == "Rogue")
         {
@@ -454,12 +460,17 @@ public:
                         Player.mana += ManaIndex;
                         ManaIndex++;
                         Turn++;
+                        if (vHand.size() < 7)
+                        {
+                            DrawCard(D.vDeck);
+                        }
                         continue;
                     }
 
-                    // Build readable list and total damage
+                    // Build readable list and total damage and heal
                     string ListofSelectedCards = "";
                     int cSelectedDamage = 0;
+                    int cSelectedHeal = 0;
                     // sort indices to build list in the order they were selected (optional)
                     // we can iterate SelectedIndices as-is; here we produce a readable list:
                     for (size_t k = 0; k < SelectedIndices.size(); ++k)
@@ -472,10 +483,29 @@ public:
 
                         ListofSelectedCards += vHand.at(idx).Name;
                         cSelectedDamage += vHand.at(idx).Damage;
+                        cSelectedHeal += vHand.at(idx).Heal;
                     }
 
                     system("cls");
-                    cout << "You played " << ListofSelectedCards << " dealing " << cSelectedDamage << " damage!" << endl;
+                    cout << "You played " << ListofSelectedCards;
+                        if (cSelectedDamage > 0 )
+                        {
+
+                            cout << " dealing " << cSelectedDamage << " damage";
+                        }
+                        if (cSelectedDamage > 0 && cSelectedHeal > 0)
+                        {
+                            cout << " and";
+                        }
+                        if (cSelectedHeal > 0)
+                        {
+                            cout << " healing you for " << cSelectedHeal << " health!" << endl;
+                        }
+                        else
+                        {
+                            cout << "!" << endl;
+						}
+                
                     cout << Goblin.name << " has " << Goblin.eTakeDamage(cSelectedDamage) << " health remaining!" << endl;
                     Player.mana += ManaIndex;
                     ManaIndex++;
