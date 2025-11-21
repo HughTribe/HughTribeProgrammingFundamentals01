@@ -7,6 +7,8 @@
 #include <vector>
 using namespace std;	
 
+int partysCoins = 100;
+
 class Weapon
 {
 
@@ -25,83 +27,193 @@ class Weapon
 	int damage = 0;
 	string role;
 };
+
 Weapon greatSword("Great Sword", "Sword", 40, 100, "Knight");
 Weapon scimitar("Scimitar", "Sword", 35, 75, "Knight");
-Weapon dagger("Dagger", "Sword", 10, 35, "Knight");	
+Weapon dagger("Dagger", "Sword", 10, 35, "Knight");
 Weapon longbow("Longbow", "Bow", 20, 55, "Archer");
 Weapon crossbow("Crossbow", "Bow", 40, 100, "Archer");
 Weapon rustySpear("Rusty Spear", "Spear", 10, 35, "Spearman");
 Weapon ironSpear("Iron Spear", "Spear", 20, 65, "Spearman");
+Weapon nullWeapon("No Weapon", "None", 0, 0, "None");
 
 vector<Weapon> shopInventory = { greatSword, scimitar, dagger, longbow, crossbow, rustySpear, ironSpear };
 
-std::string PromptForAndOutputName(std::string& player)
+
+
+ struct Player
+ {
+	Player(string n, Weapon w, int c) : name(n), weapon(w), choice(c) {}// Use member initializer list to initialize all members
+
+	string name;
+	Weapon weapon;
+	int choice;
+ };
+	
+Player player1 ("player1", nullWeapon, 0);
+Player player2 ("player2", nullWeapon, 0);
+Player player3 ("player3", nullWeapon, 0);
+
+
+Player PromptForAndOutputName(Player& player)
 {
-		std::cout << "- Enter " << player << "'s name: ";
-		std::cin >> player;
-		std::cout << '\n';
+		cout << "- Enter " << player.name << "'s name: ";
+		getline(cin, player.name);
+		cout << '\n';
 	  
 	return player;
 }
 int main()
 {
-	std::string player1 = "player1";
-	std::string player2 = "player2";
-	std::string player3 = "player3";
+	PromptForAndOutputName(player1);
+	PromptForAndOutputName(player2);
+	PromptForAndOutputName(player3);
 	bool HappyWithSelectionOfWeapons = false;
 	do
 	{
-		PromptForAndOutputName(player1);
-		PromptForAndOutputName(player2);
-		PromptForAndOutputName(player3);
 
-		std::cout << ">> welcome " << player1 << ", " << player2 << ", and " << player3 << " to the shop!\n";
+		std::cout << ">> welcome " << player1.name << ", " << player2.name << ", and " << player3.name << " to the shop!\n";
 		std::cout << "You currently have 100 coins. You can buy the following items\n";
 		for (int i = 0; i < shopInventory.size(); i++)
 		{
 			std::cout << ">> " << i + 1 << ". " << shopInventory.at(i).name << " (" << shopInventory.at(i).price << " coins, " << shopInventory.at(i).damage << " Damage)\n";
 		}
-		int p1Choice;
+		
 		do
 		{
 
 			cout << "Player 1, please enter a weapon to buy: ";
-			cin >> p1Choice;
-			if (p1Choice < 0 || p1Choice > 8)
+
+			cin >> player1.choice;
+			if(cin.fail())
+			{
+				cin.clear(); // clear the fail state
+				cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
+				cerr << "Invalid input, please enter a number.\n";
+				continue;
+			}
+			if (player1.choice < 1 || player1.choice > 8)
 			{
 				cerr << "Invalid choice, please choose a valid weapon number.\n";
+				continue;
 			}
+			if(partysCoins - shopInventory.at(player1.choice - 1).price < 0)
+			{
+				cerr << "Not enough coins to buy that weapon, please choose a different weapon.\n";
+				continue;
+			}
+
+			player1.weapon = shopInventory.at(player1.choice - 1);
+			partysCoins -= player1.weapon.price;
+			cout << player1.name << " bought a " << player1.weapon.name << " for " << player1.weapon.price << " coins. The party now has " << partysCoins << " coins left.\n";
+			break;
 			
-		} while (p1Choice < 0 || p1Choice > 8);
-		int p2Choice;
+		} while (true);
+		
 		do   
 		{
 
 			cout << "Player 2, please enter a weapon to buy: ";
-			cin >> p2Choice;
-			if (p2Choice < 0 || p2Choice > 8)
+			cin >> player2.choice;
+			if(cin.fail())
+			{
+				cin.clear(); // clear the fail state
+				cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
+				cerr << "Invalid input, please enter a number.\n";
+				continue;
+			}
+			if (player2.choice < 1 || player2.choice > 8)
 			{
 				cerr << "Invalid choice, please choose a valid weapon number.\n";
+				continue;
+			}
+			if(partysCoins - shopInventory.at(player2.choice - 1).price < 0)
+			{
+				cerr << "Not enough coins to buy that weapon, please choose a different weapon.\n";
+				continue;
+			}
+			if(player2.choice == player1.choice || player2.choice == player3.choice)
+			{
+				cerr << "That weapon has already been chosen, choose a different weapon.\n";
+				continue;
 			}
 			
+			player2.weapon = shopInventory.at(player2.choice - 1);
+			partysCoins -= player2.weapon.price;
+			cout << player2.name << " bought a " << player2.weapon.name << " for " << player2.weapon.price << " coins. The party now has " << partysCoins << " coins left.\n";
+			break;
 
-		} while (p2Choice < 0 || p2Choice > 8);
-		int p3Choice;
+		} while (true);
+		
 		do
 		{
 
 			cout << "Player 3, please enter a weapon to buy: ";
-			cin >> p3Choice;
-			if (p3Choice < 0 || p3Choice > 8)
+			cin >> player3.choice;
+			if(cin.fail())
+			{
+				cin.clear(); // clear the fail state
+				cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
+				cerr << "Invalid input, please enter a number.\n";
+				continue;
+			}
+			if (player3.choice < 1 || player3.choice > 8)
 			{
 				cerr << "Invalid choice, please choose a valid weapon number.\n";
+				continue;
+			}
+			if(partysCoins - shopInventory.at(player3.choice - 1).price < 0)
+			{
+				cerr << "Not enough coins to buy that weapon, please choose a different weapon.\n";
+				continue;
+			}
+			if(player3.choice == player1.choice || player3.choice == player2.choice)
+			{
+				cerr << "That weapon has already been chosen by please choose a different weapon.\n";
+				continue;
 			}
 			
+			player3.weapon = shopInventory.at(player3.choice - 1);
+			partysCoins -= player3.weapon.price;
+			cout << player3.name << " bought a " << player3.weapon.name << " for " << player3.weapon.price << " coins. The party now has " << partysCoins << " coins left.\n";
+			break;
 
-		} while (p3Choice < 0 || p3Choice > 8);
+		} while (true);
 
+		do
+		{
+			string userInput = "";
+			cout << "Are you happy with your selection of weapons? (yes/no): ";
+			cin >> userInput;
+			
+			if(userInput == "no")
+			{
+				HappyWithSelectionOfWeapons = false;
+				partysCoins = 100;
+				player1.weapon = nullWeapon;
+				player2.weapon = nullWeapon;
+				player3.weapon = nullWeapon;
+				cout << "\n---------------------------------\n\n";
+				break;
+			}
+			if(userInput == "yes")
+			{
+				HappyWithSelectionOfWeapons = true;
+				break;
+			}
+			else
+			{
+				cerr << "\nPlease input <yes> or <no>\n";
+				continue;
+			}
+		} while (true);
 
 	} while (!HappyWithSelectionOfWeapons);
+
+	cout << "\n\n The party:" << endl;
+	cout << ">> - Player 1 (" << player1.name << "), Role: " << player1.weapon.role << ", Weapon: " << player1.weapon.name << ", Damage: " << player1.weapon.damage << endl;
+	cout << ">> - Player 2 (" << player2.name << "), Role: " << player2.weapon.role << ", Weapon: " << player2.weapon.name << ", Damage: " << player2.weapon.damage << endl;
+	cout << ">> - Player 3 (" << player3.name << "), Role: " << player3.weapon.role << ", Weapon: " << player3.weapon.name << ", Damage: " << player3.weapon.damage << endl;
 }
 
 
