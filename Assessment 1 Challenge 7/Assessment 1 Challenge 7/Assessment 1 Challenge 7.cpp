@@ -50,7 +50,7 @@ int main()
 	std::string player3 = "player3";
 	bool HappyWithSelectionOfWeapons = false;
 	do
-	{	
+	{
 		PromptForAndOutputName(player1);
 		PromptForAndOutputName(player2);
 		PromptForAndOutputName(player3);
@@ -59,10 +59,49 @@ int main()
 		std::cout << "You currently have 100 coins. You can buy the following items\n";
 		for (int i = 0; i < shopInventory.size(); i++)
 		{
-			std::cout << ">> " << i + 1 <<". " << shopInventory.at(i).name << " (" << shopInventory.at(i).price << " coins, " << shopInventory.at(i).damage << " Damage)\n";
+			std::cout << ">> " << i + 1 << ". " << shopInventory.at(i).name << " (" << shopInventory.at(i).price << " coins, " << shopInventory.at(i).damage << " Damage)\n";
 		}
+		int p1Choice;
+		do
+		{
+
+			cout << "Player 1, please enter a weapon to buy: ";
+			cin >> p1Choice;
+			if (p1Choice < 0 || p1Choice > 8)
+			{
+				cerr << "Invalid choice, please choose a valid weapon number.\n";
+			}
+			
+		} while (p1Choice < 0 || p1Choice > 8);
+		int p2Choice;
+		do
+		{
+
+			cout << "Player 2, please enter a weapon to buy: ";
+			cin >> p2Choice;
+			if (p2Choice < 0 || p2Choice > 8)
+			{
+				cerr << "Invalid choice, please choose a valid weapon number.\n";
+			}
+			
+
+		} while (p2Choice < 0 || p2Choice > 8);
+		int p3Choice;
+		do
+		{
+
+			cout << "Player 3, please enter a weapon to buy: ";
+			cin >> p3Choice;
+			if (p3Choice < 0 || p3Choice > 8)
+			{
+				cerr << "Invalid choice, please choose a valid weapon number.\n";
+			}
+			
+
+		} while (p3Choice < 0 || p3Choice > 8);
+
+
 	} while (!HappyWithSelectionOfWeapons);
-	
 }
 
 
