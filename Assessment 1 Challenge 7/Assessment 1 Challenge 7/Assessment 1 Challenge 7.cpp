@@ -74,7 +74,7 @@ int main()
 			
 		} while (p1Choice < 0 || p1Choice > 8);
 		int p2Choice;
-		do
+		do   
 		{
 
 			cout << "Player 2, please enter a weapon to buy: ";
