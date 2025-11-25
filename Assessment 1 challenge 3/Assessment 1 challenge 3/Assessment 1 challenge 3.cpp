@@ -7,16 +7,16 @@ int main()
 {
 	float Number = 0;
 
-	//std::cout << "Please enter a number:  ";
 	do
 	{
-		std::cout << "Please enter a number:  ";
-		std::cin.clear();
-		std::cin.ignore(1000, '\n');
-		//std::cout << "Please enter a number:  ";
+		std::cout << ">>Please enter a number:  ";
+		
+		
 		std::cin >> Number;
 		if (std::cin.fail() == true)
 		{
+			std::cin.clear();
+			std::cin.ignore(1000, '\n');
 			std::cout << "\nThats not a number :p\n";
 			continue;
 		}
@@ -25,8 +25,29 @@ int main()
 			break;
 		}
 
-	} while (std::cin.fail() == true);
+	} while (true);
+
+	std::cout << "\n>> neg(x): " << -Number << std::endl;
+	std::cout << ">> abs(x): " << abs(Number) << std::endl;
+	std::cout << ">> pow2(x): " << Number * Number << std::endl;
+	std::cout << ">> pow3(x): " << Number * Number * Number << std::endl;
+	std::cout << ">> sqrt(x): ";
+	if (Number < 0)
+	{
+		Number = -Number;
+		std::cout << sqrt(Number) << std::endl;
+		Number = -Number;
+	}
+	else
+	{
+		std::cout << sqrt(Number) << std::endl;
+	}
+	std::cout << ">> floor(x): " << floor(Number) << std::endl;	
+	std::cout << ">> ceil(x): " << ceil(Number) << std::endl;
+	std::cout << ">> round(x): " << round(Number) << std::endl;
 }
+
+
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
