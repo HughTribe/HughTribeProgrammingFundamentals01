@@ -18,7 +18,7 @@ int main()
     std::string name;
     std::string username;
     std::string clantag;
-    unsigned int Exp = 200;
+    int Exp = 200;
     
     std::cout << "What is your name?\n";
     std::cin >> name;
@@ -28,11 +28,21 @@ int main()
     std::cin >> clantag;
     do
     {
-        std::cin.clear();
-        std::cin.ignore(1000, '\n');
         std::cout << "How many experience points do you have?\n";
         std::cin >> Exp;
-    } while (std::cin.fail() == true);
+        
+        if (std::cin.fail() == true || Exp < 0)
+        {
+            std::cin.clear();
+            std::cin.ignore(1000, '\n');
+            std::cerr << "[!] ERROR Please enter a valid number for experience points.\n";
+            continue;
+        }    
+        else
+        {
+            break;
+        }
+    } while (true);
         
     
     int Level = Exp / 100;

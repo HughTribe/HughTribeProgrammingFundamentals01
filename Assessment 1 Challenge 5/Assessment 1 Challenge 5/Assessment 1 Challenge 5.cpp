@@ -5,7 +5,7 @@
 #include <string>
 #include <cctype>
 
-// Checks if the input contains at least one alphabetic character
+
 bool ContainsAlpha(const std::string& text) {
     
     for (char x : text)
@@ -18,7 +18,7 @@ bool ContainsAlpha(const std::string& text) {
     return false;
 }
 
-// Returns a new string with all characters capitalised
+
 std::string CapitaliseAll(const std::string& text) {
     
     std::string result = text;
@@ -29,7 +29,7 @@ std::string CapitaliseAll(const std::string& text) {
     return result;
 }
 
-// Returns a new string with all characters in lowercase
+
 std::string UncapitaliseAll(const std::string& text) {
 
     std::string result = text;
@@ -40,7 +40,7 @@ std::string UncapitaliseAll(const std::string& text) {
     return result;
 }
 
-// Returns a new string with the first character of each sentence capitalised
+
 std::string SentenceCase(const std::string& text) {
 
     std::string result = text;
@@ -56,12 +56,12 @@ std::string SentenceCase(const std::string& text) {
     {
         if (result[i - 1] == '.' || result[i - 1] == '!' || result[i - 1] == '?')
         {
-            // Skip any spaces after the punctuation
+          
             while (i < result.length() && std::isspace(static_cast<unsigned char>(result[i])))
             {
                 i++;
             }
-            // Capitalise the next alphabetic character
+           
             if (i < result.length() && std::isalpha(static_cast<unsigned char>(result[i])))
             {
                 result[i] = std::toupper(static_cast<unsigned char>(result[i]));
@@ -69,14 +69,14 @@ std::string SentenceCase(const std::string& text) {
         }
         else
         {
-            // Ensure all other characters are lowercase
+           
             result[i] = std::tolower(static_cast<unsigned char>(result[i]));
         }
     }
     return result;
 }
 
-// Returns a new string with alternating casing starting with uppercase
+
 std::string AlternateCasing(const std::string& text) {
 
     std::string result = text;
